@@ -1,0 +1,25 @@
+{
+	"name": "bankintersync",
+	"type": "module",
+	"version": "1.0.0",
+	"main": "main.js",
+	"scripts": {
+		"build": "tsc",
+		"start": "node dist/main.js",
+		"dev": "nodemon"
+	},
+	"author": "",
+	"license": "ISC",
+	"description": "",
+	"dependencies": {
+		"node-xlsx": "^0.24.0",
+		"selenium-webdriver": "^4.24.0"
+	},
+	"devDependencies": {
+		"@types/node": "^22.5.2",
+		"dotenv": "^16.4.5",
+		"nodemon": "^3.1.4",
+		"ts-node": "^10.9.2",
+		"typescript": "^5.5.4"
+	}
+}
