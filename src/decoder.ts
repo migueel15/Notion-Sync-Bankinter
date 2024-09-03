@@ -3,7 +3,7 @@ import fs from "fs"
 import { sleep, Transaction } from "./utils.js"
 
 const asignType = (concepto: string): string => {
-	concepto = concepto.toUpperCase()
+	concepto = concepto.toUpperCase() || ""
 	if (concepto.includes("BIZUM")) {
 		return "Bizum"
 	}

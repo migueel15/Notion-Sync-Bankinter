@@ -5,7 +5,7 @@ import { decodeXls } from './decoder.js';
 import { createFolderIfNotExists, DOWNLOAD_PATH } from './utils.js';
 
 createFolderIfNotExists(DOWNLOAD_PATH)
-await getMonthTransactions() // descarga xls
+await getMonthTransactions(new Date("2023-01-01"))
 //
 const transactions = await decodeXls(DOWNLOAD_PATH)
 console.log(transactions)

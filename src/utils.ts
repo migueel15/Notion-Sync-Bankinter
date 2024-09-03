@@ -37,12 +37,10 @@ function formatDate(date: Date): string {
 	return `${dayFormatted}/${monthFormatted}/${year}`;
 }
 
-export function getDateRange(): DateRange {
+export function getDateRange(from: Date): DateRange {
 	const today = new Date()
-	const thirtyDaysAgo = new Date(today)
-	thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
 	return {
-		start: formatDate(thirtyDaysAgo),
+		start: formatDate(from),
 		end: formatDate(today)
 	}
 }
@@ -53,7 +51,7 @@ export function sleep(ms: number) {
 
 export async function waitForDownloadComplete(folderPath: string) {
 	// await for a file in the path
-	while (fs.readdirSync(folderPath).length === 0) {
+	while (fs.readdirSync(folderPath).length === 0 || fs.readdirSync(folderPath).some(file => file.endsWith(".part"))) {
 		await sleep(100)
 	}
 }

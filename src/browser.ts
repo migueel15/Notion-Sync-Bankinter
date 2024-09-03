@@ -28,7 +28,7 @@ const login = async (driver: any) => {
 	);
 }
 
-const filterDate = async (driver: any) => {
+const filterDate = async (driver: any, from: Date) => {
 	const searchButton = await driver.findElement(By.id("abrirCerrarBuscador"))
 	searchButton.click()
 
@@ -41,7 +41,8 @@ const filterDate = async (driver: any) => {
 	const desdeInput = await driver.findElement(By.id("buscador:dateFrom"))
 	const hastaInput = await driver.findElement(By.id("buscador:dateTo"))
 
-	const dateValues = getDateRange()
+	const dateValues = getDateRange(from)
+	console.log(dateValues)
 	await driver.executeScript("arguments[0].setAttribute('value', arguments[1])", desdeInput, dateValues.start)
 	await driver.executeScript("arguments[0].setAttribute('value', arguments[1])", hastaInput, dateValues.end)
 
@@ -53,7 +54,7 @@ const filterDate = async (driver: any) => {
 
 	await driver.wait(
 		until.elementLocated(By.className('icoDownload')),
-		10000 // Timeout de 10 segundos
+		50000 // Timeout de 10 segundos
 	);
 }
 
@@ -63,14 +64,14 @@ const downloadFile = async (driver: any) => {
 	await waitForDownloadComplete(DOWNLOAD_PATH)
 }
 
-export const getMonthTransactions = async () => {
+export const getMonthTransactions = async (from: Date) => {
 	const firefoxOptions = new Options().setPreference('browser.download.folderList', 2) // Set download directory
 		.setPreference('browser.download.dir', DOWNLOAD_PATH) // Specify download directory
 		.setPreference('browser.helperApps.neverAsk.saveToDisk', 'application/vnd.ms-excel') // MIME type for XLS files
 		.setPreference('browser.download.useDownloadDir', true) // Use the specified download directory
 		.setPreference('browser.download.manager.showWhenStarting', false) // Hide the download dialog
 		.setPreference('browser.download.manager.focusWhenStarting', false) // Focus on the download manager
-		.addArguments("--headless")
+	// .addArguments("--headless")
 	let driver = await new Builder().forBrowser(Browser.FIREFOX).setFirefoxOptions(firefoxOptions).build()
 	try {
 		const URL = process.env.TRANSACTIONS_URL + "?INDEX_CTA=0&IND=C&TIPO=N"
@@ -82,7 +83,7 @@ export const getMonthTransactions = async () => {
 		await fildLoginFiels(driver)
 		await login(driver)
 
-		await filterDate(driver)
+		await filterDate(driver, from)
 		await downloadFile(driver)
 
 	} finally {
