@@ -2,4 +2,6 @@
 dist
 node_modules
 excel
-
+token.json
+requisition.json
+transactions.json

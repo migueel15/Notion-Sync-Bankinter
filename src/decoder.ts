@@ -1,6 +1,6 @@
 import xlsx from "node-xlsx"
 import fs from "fs"
-import { sleep, Transaction } from "./utils.js"
+import { sleep, Transaction } from "./utils/global.js"
 
 const asignType = (concepto: string): string => {
 	concepto = concepto.toUpperCase() || ""

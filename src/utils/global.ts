@@ -2,12 +2,14 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import fs from "fs"
 import path from "path"
+import readline from "readline"
 
 // Obtener el equivalente a `__dirname`
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.resolve(dirname(__filename), "..");
+export const __dirname = path.resolve(dirname(__filename), "../..");
 
 export const DOWNLOAD_PATH = path.join(__dirname, "excel/")
+export const REQUISITION_PATH = path.join(__dirname, "requisition.json")
 
 export type Transaction = {
 	fecha_contable: string,
@@ -45,7 +47,12 @@ export function getDateRange(from: Date): DateRange {
 	}
 }
 
-export function sleep(ms: number) {
+export function dateDifferenceInDays(date1: Date, date2: Date): number {
+	const diffInMs = date2.getTime() - date1.getTime()
+	return diffInMs / (1000 * 60 * 60 * 24)
+}
+
+export async function sleep(ms: number) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
@@ -61,4 +68,18 @@ export function createFolderIfNotExists(folderPath: string) {
 		console.log(`Creating folder ${folderPath}`)
 		fs.mkdirSync(folderPath)
 	}
+}
+
+export async function waitForUserInput(msg: string): Promise<void> {
+	const rl = readline.createInterface({
+		input: process.stdin,
+		output: process.stdout
+	});
+
+	return new Promise((resolve) => {
+		rl.question(msg, () => {
+			rl.close();
+			resolve();
+		});
+	});
 }
