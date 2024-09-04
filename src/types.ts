@@ -1,5 +1,10 @@
 import { UUID } from "crypto"
 
+export type DateRange = {
+	start: string;
+	end: string;
+}
+
 export type TokenDataRaw = {
 	access: string,
 	access_expires: number,
@@ -37,6 +42,13 @@ export type RequisitionRequest = {
 	institutionId?: string,
 	maxHistoricalDays?: number,
 	accessValidForDays?: number,
+}
+
+export type RequisitionFetchAll = {
+	count: number,
+	next: string,
+	previous: string,
+	results: Requisition[]
 }
 
 export type Transaction = {

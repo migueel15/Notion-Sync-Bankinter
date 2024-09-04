@@ -3,6 +3,7 @@ import { dirname } from 'path';
 import fs from "fs"
 import path from "path"
 import readline from "readline"
+import { DateRange } from '../types.js';
 
 // Obtener el equivalente a `__dirname`
 const __filename = fileURLToPath(import.meta.url);
@@ -11,19 +12,6 @@ export const __dirname = path.resolve(dirname(__filename), "../..");
 export const DOWNLOAD_PATH = path.join(__dirname, "excel/")
 export const REQUISITION_PATH = path.join(__dirname, "requisition.json")
 
-export type Transaction = {
-	fecha_contable: string,
-	fecha_valor: string,
-	concepto: string,
-	importe: number,
-	saldo: number,
-	tipo: string
-}
-
-export type DateRange = {
-	start: string;
-	end: string;
-}
 
 function formatDate(date: Date): string {
 	// Extract the day, month, and year from the Date object

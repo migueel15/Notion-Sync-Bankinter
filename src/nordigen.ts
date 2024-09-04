@@ -1,21 +1,6 @@
 import { randomUUID } from "crypto";
-import { getRequisitionFromFile, getTokenFromFile, saveRequisitionToFile, saveTokenToFile } from "./utils.js";
-
-export async function getNewNordigenAccesToken() {
-	const NEW_TOKEN_NORDIGEN_ENDPOINT = "https://bankaccountdata.gocardless.com/api/v2/token/new/"
-	const formdata = new FormData();
-	formdata.append("secret_id", process.env.NORDIGEN_SECRET_ID)
-	formdata.append("secret_key", process.env.NORDIGEN_SECRET_KEY)
-
-	const response = await fetch(NEW_TOKEN_NORDIGEN_ENDPOINT, {
-		method: "POST",
-		body: formdata,
-		redirect: "follow"
-	})
-
-	const resJson = await response.json()
-	saveTokenToFile(resJson)
-}
+import { getTokenFromFile, saveTokenToFile } from "./utils/token.js"
+import { getRequisitionFromFile, saveRequisitionToFile } from "./utils/requisition.js";
 
 export async function getNordigenBankList(country: string) {
 	const BANK_LIST_NORDIGEN_ENDPOINT = `https://bankaccountdata.gocardless.com/api/v2/institutions/?country=${country}`

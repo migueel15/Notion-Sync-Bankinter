@@ -1,12 +1,10 @@
-import { randomUUID } from "crypto";
-import { generateToken, getExpireDateRefreshToken, getExpireDateToken, getTokenDataFromFile, getTokenFromFile, saveTokenToFile } from "./utils/token.js"
-import { dateDifferenceInDays, REQUISITION_PATH, waitForUserInput } from "./utils/global.js"
-import fs from "fs"
-
 import NordigenClient from "nordigen-node"
-import { Requisition } from "./types.js";
+import { generateToken, getTokenFromFile, saveTokenToFile } from "./utils/token.js"
+import { waitForUserInput } from "./utils/global.js"
+import { createRequisition, getRequisitionStatus, obtainRequisition } from "./utils/requisition.js";
+
+import fs from "fs"
 import { __dirname } from "./utils/global.js";
-import { createRequisition, getAllRequisitions, getRequisitionById, getRequisitionFromFile, getRequisitionStatus, obtainRequisition, saveRequisitionToFile } from "./utils/requisition.js";
 
 const client = new NordigenClient({
 	secretId: process.env.NORDIGEN_SECRET_ID,
@@ -36,5 +34,3 @@ const transactions = await account.getTransactions()
 console.log(transactions)
 // //
 fs.writeFileSync(__dirname + "/transactions.json", JSON.stringify(transactions))
-
-

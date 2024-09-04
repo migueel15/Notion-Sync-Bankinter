@@ -1,5 +1,5 @@
 import NordigenClient from "nordigen-node"
-import { Requisition, RequisitionRequest, RequisitionStatus } from "../types.js"
+import { Requisition, RequisitionRequest, RequisitionStatus, RequisitionFetchAll } from "../types.js"
 import fs from "fs"
 import { randomUUID } from "crypto"
 import { REQUISITION_PATH } from "./global.js"
@@ -34,13 +34,6 @@ export async function createRequisition(requisitionRequest: RequisitionRequest, 
 
 export async function getRequisitionById(requisition: Requisition, client: NordigenClient): Promise<Requisition> {
 	return await client.requisition.getRequisitionById(requisition.id)
-}
-
-type RequisitionFetchAll = {
-	count: number,
-	next: string,
-	previous: string,
-	results: Requisition[]
 }
 
 export async function getAllRequisitions(client: NordigenClient): Promise<RequisitionFetchAll> {
