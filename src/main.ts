@@ -1,15 +1,25 @@
 import NordigenClient from "nordigen-node"
-import { generateToken, getTokenFromFile, saveTokenToFile } from "./utils/token.js"
-import { waitForUserInput } from "./utils/global.js"
-import { createRequisition, getRequisitionStatus, obtainRequisition } from "./utils/requisition.js";
+import {
+	generateToken,
+	getTokenFromFile,
+	saveTokenToFile,
+} from "./utils/token.js"
+import { sleep } from "./utils/global.js"
+import {
+	createRequisition,
+	getRequisitionStatus,
+	obtainRequisition,
+} from "./utils/requisition.js"
 
 import fs from "fs"
-import { __dirname } from "./utils/global.js";
+import { __dirname } from "./utils/global.js"
+import { sendMail } from "./mail.js"
+import { getLastTransaction } from "./notion.js"
 
 const client = new NordigenClient({
 	secretId: process.env.NORDIGEN_SECRET_ID,
-	secretKey: process.env.NORDIGEN_SECRET_KEY
-});
+	secretKey: process.env.NORDIGEN_SECRET_KEY,
+})
 
 const tokenData = await generateToken(client)
 saveTokenToFile(tokenData)
@@ -22,14 +32,25 @@ if (requisition === null) {
 	requisition = await createRequisition({}, client)
 }
 if (getRequisitionStatus(requisition) === "CR") {
-	console.log("Please validate the requisition in the following link:")
-	console.log(requisition.link)
-	await waitForUserInput("Press any key to continue...")
+	sendMail(requisition.link)
+	while (getRequisitionStatus(requisition) === "CR") {
+		sleep(10000)
+	}
 }
 console.log("Requisition status: ", getRequisitionStatus(requisition))
 
+const lastTransactionRegistered = await getLastTransaction()
+const start_date = lastTransactionRegistered.fecha_valor
+
 const accountId = requisition.accounts[0]
 const account = await client.account(accountId)
+
+try {
+	const finish_date = new Date().toISOString().split("T")[0]
+	const transactions = await account.getTransactions({ dateFrom: start_date, dateTo: finish_date })
+}
+
+
 const transactions = await account.getTransactions()
 console.log(transactions)
 // //
