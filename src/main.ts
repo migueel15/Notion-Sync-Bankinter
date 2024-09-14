@@ -15,6 +15,7 @@ import fs from "fs"
 import { __dirname } from "./utils/global.js"
 import { sendMail } from "./mail.js"
 import { getLastTransaction } from "./notion.js"
+import { formatTransactions } from "./utils/account/transactions.js"
 
 const client = new NordigenClient({
 	secretId: process.env.NORDIGEN_SECRET_ID,
@@ -47,11 +48,16 @@ const account = await client.account(accountId)
 
 try {
 	const finish_date = new Date().toISOString().split("T")[0]
-	const transactions = await account.getTransactions({ dateFrom: start_date, dateTo: finish_date })
+	const transactionsRequest = await account.getTransactions({
+		dateFrom: start_date,
+		dateTo: finish_date,
+	})
+	const transactions = formatTransactions(transactionsRequest)
+
+	fs.writeFileSync(
+		__dirname + "/transactions.json",
+		JSON.stringify(transactionsRequest),
+	)
+} catch (error) {
+	throw new Error(error)
 }
-
-
-const transactions = await account.getTransactions()
-console.log(transactions)
-// //
-fs.writeFileSync(__dirname + "/transactions.json", JSON.stringify(transactions))

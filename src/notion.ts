@@ -43,3 +43,5 @@ export async function getLastTransaction(): Promise<NotionTransaction> {
 
 const res = await getLastTransaction()
 console.log(res)
+
+export function updateNotionDatabase(transactions: Transaction[]) { }

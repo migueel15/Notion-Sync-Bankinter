@@ -1,3 +1,5 @@
+import { Transaction, TransactionsRequest } from "../../types.js"
+
 export async function getTransacactionsSince(start_date: string, account: any) {
 	try {
 		const finish_date = new Date().toISOString().split("T")[0]
@@ -7,4 +9,10 @@ export async function getTransacactionsSince(start_date: string, account: any) {
 		})
 	} finally {
 	}
+}
+
+export function formatTransactions(
+	request: TransactionsRequest,
+): Transaction[] {
+	return request.transactions.booked
 }
