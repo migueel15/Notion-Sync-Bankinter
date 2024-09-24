@@ -41,7 +41,12 @@ export async function getLastTransaction(): Promise<NotionTransaction> {
 	}
 }
 
+export async function getLastTransactionDate(): Promise<string> {
+	const lastTransaction = await getLastTransaction()
+	return lastTransaction.fecha_valor
+}
+
 const res = await getLastTransaction()
 console.log(res)
 
-export function updateNotionDatabase(transactions: Transaction[]) { }
+// export function updateNotionDatabase(transactions: Transaction[]) { }
